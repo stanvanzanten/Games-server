@@ -54,6 +54,7 @@ routes.put('/game/:id', function (req, res) {
 // 
 
 routes.post('/developer/:id/game', async function (req, res) {
+    console.log(req.body);
     // Get developer
     var dev = await Developer.findById(req.params.id)
     // Check dev
@@ -62,6 +63,7 @@ routes.post('/developer/:id/game', async function (req, res) {
     //Add developer to Game
     new_game.developer = dev;
     new_game.save(function (err, task) {
+        console.log(new_game);
         if (err)
         res.send(err);
         res.json(task);

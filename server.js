@@ -34,6 +34,19 @@ app.use(bodyParser.json({
 })); // parse application/vnd.api+json as json
 
 app.use(session({secret:"hau43758werg832b2ejg", resave: false, saveUninitialized: true}));
+app.set('secretKey', 'nodeRestApi'); // jwt secret token
+
+function validateUser(req, res, next) {
+    jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
+      if (err) {
+        res.json({status:"error", message: err.message, data:null});
+      }else{
+        // add user id to request
+        req.body.userId = decoded.id;
+        next();
+      }
+    });
+}
 
 // Beveilig alle URL routes, tenzij het om /login of /register gaat.
 // app.use(expressJWT({
