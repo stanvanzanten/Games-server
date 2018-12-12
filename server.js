@@ -13,6 +13,7 @@ var loginroutes_v1 = require('./api/login.routes.v1');
 var config = require('./config/env/env');
 var session = require('express-session');
 // var expressJWT = require('express-jwt');
+const cors = require('cors');
 
 var app = express();
 
@@ -23,6 +24,7 @@ var app = express();
 // Zie eventueel ook: https://www.sitepoint.com/understanding-module-exports-exports-node-js/  
 module.exports = {};
 
+app.use(cors())
 // bodyParser zorgt dat we de body uit een request kunnen gebruiken,
 // hierin zit de inhoud van een POST request.
 app.use(bodyParser.urlencoded({
