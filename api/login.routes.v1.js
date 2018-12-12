@@ -5,28 +5,28 @@ var User = require('../model/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-routes.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
-})
+routes.get('/user', function (req, res) {
+    res.contentType('application/json');
+    User.find({})
+        .then((users) => {
+            // console.log(films);
+            res.status(200).json(users);
+        })
+        .catch((error) => res.status(401).json(error));
+});
 
-// routes.post('/login', function(req, res){
-//     var username = req.body.username;
-//     var password = req.body.password;
+routes.get('/user/:id', function (req, res) {
+    res.contentType('application/json');
+    User.findById(req.params.id)
+        .then((user) => {
+            // console.log(film);
+            res.contentType('application/json');
+            var id = req.params.id;
+            res.status(200).json(user);
+        })
+        .catch((error) => res.status(401).json(error));
+});
 
-//     User.findOne({username: username, password: password}, function(err, user){
-//         if(err){
-//             console.log(err);
-//             return res.status(500).send();
-//         }
-
-//         if(!user){
-//             return res.status(404).send();
-//         }
-
-//         req.session.user = user;
-//         return res.status(200).send();
-//     })
-// });
 routes.post('/register', function (req, res, next) {
     User.create({ username: req.body.username, password: req.body.password, firstname: req.body.firstname, lastname: req.body.lastname }, function (err, result) {
         if (err)
@@ -44,9 +44,9 @@ routes.post('/authenticate', function (req, res, next) {
         } else {
             if (bcrypt.compareSync(req.body.password, userInfo.password)) {
                 const token = jwt.sign({ id: userInfo._id }, req.app.get('secretKey'), { expiresIn: '20h' });
-                res.json({data: { user: userInfo, token: token } });
+                res.json({ data: { user: userInfo, token: token } });
             } else {
-                res.json({ status: "error", message: "Invalid username/password!!!", data: null });
+                res.json({ status: "error", message: "Invalid username/password!", data: null });
             }
         }
     });
@@ -64,26 +64,5 @@ routes.get('/logout', function (req, res) {
     req.session.destroy();
     return res.status(200).send();
 });
-
-// routes.post('/register', function(req, res){
-//     var username = req.body.username;
-//     var password = req.body.password;
-//     var firstname = req.body.firstname;
-//     var lastname = req.body.lastname;
-
-//     var newuser = new User();
-//     newuser.username = username;
-//     newuser.password = password;
-//     newuser.firstname = firstname;
-//     newuser.lastname = lastname;
-//     newuser.save(function(err, savedUser){
-//         if(err){
-//             console.log(err);
-//             return res.status(500).send();
-//         }
-
-//         return res.status(200).send();
-//     })
-// });
 
 module.exports = routes;
