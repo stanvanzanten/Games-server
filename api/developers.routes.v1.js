@@ -49,13 +49,11 @@ routes.put('/developer/:id', function (req, res) {
         .catch((error) => res.status(401).json(error));
 });
 
-routes.post('/developer', function (req, res) {
-    // var game = await Game.findById(req.params.id)
-    // Check dev
-    // if (!game) return res.status(404).send({ error: 'cannot add developer', message: 'Game not found' })
-    //Add developer to Game
-    var new_developer = new Developer(req.body);
-    // new_developer.games = game;
+routes.post('/game/:id/developer', async function (req, res) {
+    const game = await Game.findById(req.params.id)
+    if (!game) return res.status(404).send({ error: 'cannot add developer', message: 'Game not found' })
+    var new_developer = new Developer(req.body)
+    new_developer.games = game;
     new_developer.save(function (err, task) {
         if (err)
             res.send(err);

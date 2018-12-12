@@ -2,7 +2,7 @@ var express = require('express');
 var routes = express.Router();
 var mongodb = require('../config/mongo.db');
 var Game = require('../model/games.model');
-var Developer = require('../model/developers.model')
+const Developer = require('../model/developers.model')
 
 //
 // Geef een lijst van alle games.
@@ -54,18 +54,14 @@ routes.put('/game/:id', function (req, res) {
 // 
 
 routes.post('/developer/:id/game', async function (req, res) {
-    console.log(req.body);
-    // Get developer
-    var dev = await Developer.findById(req.params.id)
-    // Check dev
+    const dev = await Developer.findById(req.params.id)
     if (!dev) return res.status(404).send({ error: 'cannot add game', message: 'Developer not found' })
     var new_game = new Game(req.body);
-    //Add developer to Game
     new_game.developer = dev;
     new_game.save(function (err, task) {
         console.log(new_game);
         if (err)
-        res.send(err);
+            res.send(err);
         res.json(task);
     });
 });
