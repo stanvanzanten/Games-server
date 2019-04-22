@@ -11,6 +11,7 @@ var dburl = process.env.NODE_ENV === 'production' ?
     'mongodb://' + env.dbUser + ':' + env.dbPassword + '@' + env.dbHost + ':' + env.dbPort + '/' + env.dbDatabase :
     'mongodb://localhost/' + env.dbDatabase
 
+var dburl_dev = 'mongodb://<stanzanten>:<Insignia01>@ds145486.mlab.com:45486/gamesdb'
 module.exports = {
     env: env,
     dburl: dburl
